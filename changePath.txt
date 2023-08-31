@@ -1,4 +1,21 @@
 ### 데이터셋 csv 파일의 경로를 읽지 못하는 문제 해결을 위한 csv파일 수정 커맨드 ###
-
+'''
 sed -i 's|./train_source_image|/home/work/CPS_Project/Samsung AI-Challenge/open/train_source_image|g' train_source.csv
 sed -i 's|./train_source_gt|/home/work/CPS_Project/Samsung AI-Challenge/open/train_source_gt|g' train_source.csv
+'''
+
+### test.csv 파일의 실제 img 경로를 읽어오지 못하는 문제 해결을 위한 python 입출력 코드 ###
+'''
+import pandas as pd
+
+# Read the CSV file
+csv_file_path = '/home/work/CPS_Project/Samsung AI-Challenge/open/test.csv'
+df = pd.read_csv(csv_file_path)
+
+# Update the data paths
+new_data_directory = '/home/work/CPS_Project/Samsung AI-Challenge/open/test_image/'
+df['img_path'] = new_data_directory + df['img_path'].str.split('/').str[-1]
+
+# Save the updated DataFrame back to the CSV file
+df.to_csv(csv_file_path, index=False)
+'''

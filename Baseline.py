@@ -16,24 +16,6 @@ from albumentations.pytorch import ToTensorV2
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
 
-import os
-import cv2
-from PIL import Image
-import pandas as pd
-import numpy as np
-
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
-
-from tqdm import tqdm
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(device)
-
 class CustomDataset(Dataset):
     def __init__(self, csv_file, transform=None, infer=False):
         self.data = pd.read_csv(csv_file)
@@ -65,12 +47,12 @@ class CustomDataset(Dataset):
         return image, mask
 
         transform = A.Compose(
-    [   
-        A.Resize(224, 224),
-        A.Normalize(),
-        ToTensorV2()
-    ]
-)
+        [   
+            A.Resize(224, 224),
+            A.Normalize(),
+            ToTensorV2()
+        ]  
+    )
 
 dataset = CustomDataset(csv_file='/home/work/CPS_Project/Samsung AI-Challenge/open/train_source.csv', transform=transform)
 dataloader = DataLoader(dataset, batch_size=16, shuffle=True, num_workers=4)
@@ -143,9 +125,12 @@ for epoch in range(20):  # 20 에폭 동안 학습합니다.
     model.train()
     epoch_loss = 0
     for images, masks in tqdm(dataloader):
-        images = images.float().to(device)
-        masks = masks.long().to(device)
-
+        augmented_images = torch.stack([self.transform(image=image)['image'] for image in images])
+        augmented_masks = torch.stack([self.transform(image=mask)['image'] for mask in masks])
+    
+        images = augmented_images.float().to(device)
+        masks = augmented_masks.long().to(device)
+    
         optimizer.zero_grad()
         outputs = model(images)
         loss = criterion(outputs, masks.squeeze(1))

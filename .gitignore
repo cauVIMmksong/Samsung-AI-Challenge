@@ -2,3 +2,5 @@
 /open/**/
 /open/*.csv
 
+/segmentation_models_pytorch/**/
+*.pth

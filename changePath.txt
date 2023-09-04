@@ -2,6 +2,9 @@
 '''
 sed -i 's|./train_source_image|/home/work/CPS_Project/Samsung AI-Challenge/open/train_source_image|g' train_source.csv
 sed -i 's|./train_source_gt|/home/work/CPS_Project/Samsung AI-Challenge/open/train_source_gt|g' train_source.csv
+
+sed -i 's|./val_source_image|/home/work/CPS_Project/Samsung AI-Challenge/open/val_source_image|g' val_source.csv
+sed -i 's|./val_source_gt|/home/work/CPS_Project/Samsung AI-Challenge/open/val_source_gt|g' val_source.csv
 '''
 
 ### test.csv 파일의 실제 img 경로를 읽어오지 못하는 문제 해결을 위한 python 입출력 코드 ###
